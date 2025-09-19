@@ -1,0 +1,35 @@
+package com.cab302.weather_api;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
+import java.io.IOException;
+
+public class WeatherApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(WeatherApplication.class.getResource("weather-view.fxml"));
+            Parent root = fxmlLoader.load();
+            WeatherController weatherController = fxmlLoader.getController();
+            weatherController.setState(stage);
+            Scene scene = new Scene(root, 600, 600);
+            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+            stage.setTitle("Weather Forecaster");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            ex.getStackTrace();
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+
+        System.out.println("Application is stopping gracefully.");
+        super.stop(); // Call the superclass's stop method
+    }
+}
