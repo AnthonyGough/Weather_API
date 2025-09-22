@@ -16,8 +16,8 @@ public class WeatherApplication extends Application {
             Parent root = fxmlLoader.load();
             WeatherController weatherController = fxmlLoader.getController();
             weatherController.setState(stage);
-            Scene scene = new Scene(root, 600, 600);
-            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+            Scene scene = new Scene(root, 400, 400);
+
             stage.setTitle("Weather Forecaster");
             stage.setScene(scene);
             stage.show();

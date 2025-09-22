@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Env Variables ###
+
+.env
+.env.local
+.env.development
+.env.production
