@@ -43,3 +43,7 @@ build/
 .env.local
 .env.development
 .env.production
+
+### Maven ###
+mvnw
+mvnw.cmd
