@@ -2,32 +2,55 @@ package com.cab302.weather_api;
 
 import java.io.IOException;
 import java.lang.module.Configuration;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.time.LocalDate;
+
+
 import io.github.cdimascio.dotenv.Dotenv;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 
 public class WeatherAPIClient {
 
+    private String searchValue;
 
-    private static final ObjectMapper mapper = new ObjectMapper();
-    public static void APIClient() throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(APIUrlForm())
-                .build(); // defaults to GET
-        Response response = client.newCall(request).execute();
+    public WeatherAPIClient(String searchValue) {
+        this.searchValue = searchValue;
+    }
+    public void APIClient() throws IOException{
+        HttpClient client = HttpClient.newHttpClient();
 
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(APIUrlForm()))
+                .timeout(Duration.ofSeconds(20))
+                .build();
+    try {
 
-        System.out.println(response);
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }   catch (InterruptedException ex) {
+        ex.printStackTrace();
+    }
     }
 
 
-    private static String APIUrlForm() {
+    private  String APIUrlForm() {
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
-        return dotenv.get("WEATHER_URI") + dotenv.get("WEATHER_API_KEY");
+        return generateQuery(dotenv).toString();
 
+    }
+
+    private StringBuilder generateQuery(Dotenv dotenv) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(dotenv.get("WEATHER_URI"));
+        sb.append(dotenv.get("WEATHER_API_KEY"));
+        sb.append("&q=");
+        sb.append(this.searchValue);
+        sb.append("&date=");
+        return sb.append(LocalDate.now());
     }
 
 }

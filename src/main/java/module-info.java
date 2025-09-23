@@ -6,8 +6,6 @@ module com.cab302.weather_api {
     requires java.net.http;
 
 
-
-
     opens com.cab302.weather_api to javafx.fxml;
     exports com.cab302.weather_api;
 }
