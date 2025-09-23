@@ -1,5 +1,6 @@
-package com.cab302.weather_api;
+package com.softwaredev.weather_api.controller;
 
+import com.softwaredev.weather_api.service.WeatherAPIClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;

@@ -77,7 +77,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.cab302.weather_api/com.cab302.weather_api.WeatherApplication</mainClass>
+                            <mainClass>com.cab302.weather_api/com.softwaredev.weather_api.WeatherApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

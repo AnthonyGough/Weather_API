@@ -1,11 +1,12 @@
-package com.cab302.weather_api;
+package com.softwaredev.weather_api;
 
+import com.softwaredev.weather_api.controller.WeatherController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
+
 import java.io.IOException;
 
 public class WeatherApplication extends Application {

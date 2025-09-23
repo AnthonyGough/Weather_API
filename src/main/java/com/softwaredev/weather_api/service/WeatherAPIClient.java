@@ -1,7 +1,6 @@
-package com.cab302.weather_api;
+package com.softwaredev.weather_api.service;
 
 import java.io.IOException;
-import java.lang.module.Configuration;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;

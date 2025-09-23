@@ -1,7 +1,6 @@
-package com.cab302.weather_api;
+package com.softwaredev.weather_api;
 
 import javafx.application.Application;
-import io.github.cdimascio.dotenv.*;
 
 import java.io.IOException;
 
