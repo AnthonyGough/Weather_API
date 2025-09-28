@@ -31,38 +31,35 @@ public class WeatherController {
     public void setState(Stage stage) {
         this.stage = stage;
     }
-
+    private static WeatherAPIClient client;
     @FXML
     protected void onClearButtonClick() {
         searchCityTextField.clear();
     }
-    @FXML
-    protected void onCheckSearchTextFieldStatus() {
-        if (searchCityTextField.getText().isEmpty()) {
-            clearButton.setDisable(true);
-        } else {
-            clearButton.setDisable(false);
-        }
 
-    }
-    @FXML
-    protected void onSearchExitTextField() {
-        if (searchCityTextField.getText().isEmpty()) {
-            clearButton.setDisable(true);
-        } else {
-            clearButton.setDisable(false);
-        }
-    }
+
+
     @FXML
     public void onSearchButtonClick() throws IOException {
-        if (searchCityTextField.getText().isEmpty()) {
-            createDialog(EMPTY_NARRATION_ERROR);
-        } else {
-            WeatherAPIClient client = new WeatherAPIClient(searchCityTextField.getText());
-            client.APIClient();
+        String input = searchCityTextField.getText();
+        if (validInput(input)) {
+            invokeSearch(input);
         }
-
     }
+
+    private boolean validInput(String value) {
+        if (value.isEmpty() || value==null) {
+            createDialog(EMPTY_NARRATION_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    private void invokeSearch(String search) throws IOException {
+        client =  WeatherAPIClient.getInstance();
+        client.APIClient(search);
+    }
+
     @FXML
     public void onExitButtonClick() {
         Platform.exit();

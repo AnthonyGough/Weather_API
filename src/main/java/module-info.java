@@ -4,6 +4,7 @@ module com.softwaredev.weather_api {
     requires org.kordamp.bootstrapfx.core;
     requires io.github.cdimascio.dotenv.java;
     requires java.net.http;
+    requires com.google.gson;
 
 
     opens com.softwaredev.weather_api to javafx.fxml;
