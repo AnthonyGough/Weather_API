@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.softwaredev.weather_api.model.WeatherData;
 import io.github.cdimascio.dotenv.Dotenv;
 
 
@@ -43,8 +44,15 @@ public class WeatherAPIClient {
                     double currentTemp = current.get("temp_c").getAsDouble();
                     String currentTime = current.get("last_updated").getAsString();
 
+                    JsonObject location = root.getAsJsonObject("location");
+                    String region = location.get("region").getAsString();
+                    String country = location.get("country").getAsString();
+
                     System.out.println("Current temp_c: " + currentTemp);
                     System.out.println("Current time: " + currentTime);
+                    System.out.println("Current region: " + region);
+                    System.out.println("Current country: " + country);
+                    WeatherData data = new WeatherData(currentTemp, currentTime, region, country);
 
                     // Extract forecast.hour[].temp_c and time
                     JsonArray forecastDays = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
@@ -55,6 +63,7 @@ public class WeatherAPIClient {
                         double hourTemp = hour.get("temp_c").getAsDouble();
                         String hourTime = hour.get("time").getAsString();
                         System.out.println("Forecast hour temp_c: " + hourTemp + ", time: " + hourTime);
+                        data.setTemperatureData(hourTime, hourTemp);
                     }
                 }).join(); // Wait for completion
     }

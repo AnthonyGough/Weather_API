@@ -1,0 +1,25 @@
+package com.softwaredev.weather_api.model;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class WeatherData {
+
+    private double currentTemp;
+    private String lastUpdateTime;
+    private String region;
+    private String country;
+    private Map<String, Double> temperatureData = new HashMap<>();
+
+    public WeatherData(double currentTemp, String lastUpdateTime, String region, String country) {
+        this.currentTemp=currentTemp;
+        this.lastUpdateTime=lastUpdateTime;
+        this.region=region;
+        this.country=country;
+    }
+
+    public void setTemperatureData(String hour, Double currentTemp) {
+        temperatureData.put(hour, currentTemp);
+    }
+}

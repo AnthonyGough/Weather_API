@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class WeatherController {
     @FXML
@@ -26,6 +27,11 @@ public class WeatherController {
     @FXML
     private Button exitButton;
     private Stage stage;
+
+    @FXML
+    private List<Label> labelTempList ;
+    @FXML
+    private List<Label> labelTimeList ;
 
     private static final String EMPTY_NARRATION_ERROR = "Search Box cannot be empty - select a city";
     public void setState(Stage stage) {
