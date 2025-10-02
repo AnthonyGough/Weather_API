@@ -6,8 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 import com.google.gson.JsonArray;
@@ -32,9 +32,8 @@ public class WeatherAPIClient {
         return Holder.INSTANCE;
     }
 
-    public void APIClient(String search) throws IOException {
-
-
+    public WeatherData APIClient(String search) throws IOException {
+        WeatherData data = new WeatherData();
         MakeAsyncHttpRequest(search)
                 .thenAccept(responseBody-> {
                     JsonObject root = JsonParser.parseString(responseBody).getAsJsonObject();
@@ -52,8 +51,11 @@ public class WeatherAPIClient {
                     System.out.println("Current time: " + currentTime);
                     System.out.println("Current region: " + region);
                     System.out.println("Current country: " + country);
-                    WeatherData data = new WeatherData(currentTemp, currentTime, region, country);
 
+                    data.setCurrentTemp(currentTemp);
+                    data.setLastUpdateTime(currentTime);
+                    data.setCountry(country);
+                    data.setRegion(region);
                     // Extract forecast.hour[].temp_c and time
                     JsonArray forecastDays = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
                     JsonArray hours = forecastDays.get(0).getAsJsonObject().getAsJsonArray("hour");
@@ -66,6 +68,7 @@ public class WeatherAPIClient {
                         data.setTemperatureData(hourTime, hourTemp);
                     }
                 }).join(); // Wait for completion
+        return data;
     }
 
 
