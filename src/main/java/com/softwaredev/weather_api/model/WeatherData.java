@@ -26,6 +26,9 @@ public class WeatherData {
     public void setCurrentTemp(double value) {
         this.currentTemp = value;
     }
+    public double getCurrentTemp() {
+        return this.currentTemp ;
+    }
 
     public void setCountry(String value) {
         this.country = value;

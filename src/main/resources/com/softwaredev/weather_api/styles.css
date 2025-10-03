@@ -11,11 +11,32 @@
         -fx-font-size: 14px;
         -fx-padding: 10px 20px;
         -fx-background-radius: 5px; /* Rounded corners */
+        transition: all 0.3s ease-in-out;
     }
 
-   .root {
-       -fx-background-color: teal;
-       }
+    .searchCityTextField{
+        -fx-background-color: #19222D;
+        -fx-font-size: 1.5em;
+         -fx-font-color: blue;
+         -fx-prompt-text-fill: blue;
+    }
+
+    .searchCityTextField:focused {
+        -fx-border-color: blue;
+        -fx-border-width: 2px;
+    }
+.appTitleLabel {
+    -fx-font-size: 3.2em;
+    -fx-font-family: "HelveticaNeueLT Std ExtBlk Cn";
+    -fx-text-fill: #ffc400;
+}
+
+   .root{
+       -fx-background-color: #0E151E;
+       -fx-font-family: "HelveticaNeueLT Std";
+       -global-font-color: blue;
+       -fx-text-fill: white;
+   }
 
           .rounded-text-field {
                -fx-background-radius: 15; /* Adjust the value for desired roundness */
@@ -23,4 +44,14 @@
                /* Optional: Customize border color and width */
                -fx-border-color: #cccccc;
                -fx-border-width: 1px;
+           }
+
+           .todayForecastContainer {
+               -fx-background-color: #202B3D;
+               -fx-background-radius: 20;
+           }
+
+           .todayForecastLabel{
+               -fx-font-size: 1.5em;
+               -fx-text-fill: #ffffff;
            }

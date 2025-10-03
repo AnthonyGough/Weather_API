@@ -3,17 +3,15 @@ package com.softwaredev.weather_api.controller;
 import com.softwaredev.weather_api.model.WeatherData;
 import com.softwaredev.weather_api.service.WeatherAPIClient;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+
+import javafx.scene.shape.Sphere;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -43,18 +41,18 @@ public class WeatherController  {
     private Label region;
     @FXML
     private Label country;
-    @FXML
-    private List<Label> labelTempList ;
-    @FXML
-    private List<Label> labelTimeList ;
 
+    @FXML
+    private Sphere tempSphere;
     private static final String EMPTY_NARRATION_ERROR = "Search Box cannot be empty - select a city";
     private static final String INVALID_RESULT = "Invalid Result - Check Search";
 
     @FXML
-    public void initializeI() {
+    public void initialize() {
         country.setWrapText(true);
         region.setWrapText(true);
+        searchCityTextField.setFocusTraversable(false);
+
     }
     public void searchCity() throws IOException {
         try {
@@ -103,12 +101,12 @@ public class WeatherController  {
     private void invokeSearch(String search) throws IOException {
         client =  WeatherAPIClient.getInstance();
         WeatherData data =client.APIClient(search);
-        updateView(data);
+        updateBasicInfo(data);
     }
 
 
     @FXML
-    private void updateView(WeatherData data) {
+    private void updateBasicInfo(WeatherData data) {
 
         if (data.getCountry()!=null) {
             country.setText(data.getCountry());
@@ -119,6 +117,9 @@ public class WeatherController  {
             region.setText(data.getRegion());
         } else {
             region.setText(INVALID_RESULT);
+        }
+        if (data.getCurrentTemp() !=0) {
+            int x = 0;
         }
     }
 
