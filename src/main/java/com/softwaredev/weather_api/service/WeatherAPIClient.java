@@ -1,6 +1,5 @@
 package com.softwaredev.weather_api.service;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -8,7 +7,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
-
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -52,61 +50,55 @@ public class WeatherAPIClient {
      * @return WeatherAPIClient singleton instance
      */
     public static WeatherAPIClient getInstance() {
-        return Holder.INSTANCE;
+            return Holder.INSTANCE;
     }
 
-    public WeatherData APIClient(String search) throws IOException {
-        WeatherData data = new WeatherData();
+
+
+    public WeatherData APIClient(String search)  {
+        AtomicReference<WeatherData> data = new AtomicReference<>(new WeatherData());
         try {
-            MakeAsyncHttpRequest(search)
-                    .thenAccept(responseBody -> {
+            CompletableFuture<String> future = MakeAsyncHttpRequest(search);
+                    future.thenAccept(responseBody -> {
                         JsonObject root = JsonParser.parseString(responseBody).getAsJsonObject();
                         if (root.has("error")) {
                             JsonObject errorObj = root.getAsJsonObject("error");
                             int errorCode = errorObj.get("code").getAsInt();
-                            String errorMessage = errorObj.get("message").getAsString();
+                            String errorMessage = "Error Code: " + errorObj.get("code").getAsInt() +"\nError Message: " + errorObj.get("message").getAsString();
+                            data.set(new WeatherData(false, errorMessage));
 
-                            System.out.println("Error detected:");
-                            System.out.println("Code: " + errorCode);
-                            System.out.println("Message: " + errorMessage);
                         } else {
-                            System.out.println("No error found in JSON.");
+
+                            JsonObject current = root.getAsJsonObject("current");
+                            double currentTemp = current.get("temp_c").getAsDouble();
+                            String currentTime = current.get("last_updated").getAsString();
+
+                            JsonObject location = root.getAsJsonObject("location");
+                            String region = location.get("region").getAsString();
+                            String country = location.get("country").getAsString();
+
+                            data.set(new WeatherData(currentTemp, currentTime, region, country,true));
+
+
+                            System.out.println("Country = " + country + "\nRegion: " + region + "\nValid: " + data.get().getValidData());
+                            // Extract forecast.hour[].temp_c and time
+                            JsonArray forecastDays = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
+                            JsonArray hours = forecastDays.get(0).getAsJsonObject().getAsJsonArray("hour");
+
+                            for (JsonElement hourElement : hours) {
+                                JsonObject hour = hourElement.getAsJsonObject();
+                                double hourTemp = hour.get("temp_c").getAsDouble();
+                                String hourTime = hour.get("time").getAsString();
+                                System.out.println("Forecast hour temp_c: " + hourTemp + ", time: " + hourTime);
+                                data.get().setTemperatureData(hourTime, hourTemp);
+                            }
+
                         }
-
-                        // Extract current.temp_c and current.last_updated
-                        JsonObject current = root.getAsJsonObject("current");
-                        double currentTemp = current.get("temp_c").getAsDouble();
-                        String currentTime = current.get("last_updated").getAsString();
-
-                        JsonObject location = root.getAsJsonObject("location");
-                        String region = location.get("region").getAsString();
-                        String country = location.get("country").getAsString();
-
-                        System.out.println("Current temp_c: " + currentTemp);
-                        System.out.println("Current time: " + currentTime);
-                        System.out.println("Current region: " + region);
-                        System.out.println("Current country: " + country);
-
-                        data.setCurrentTemp(currentTemp);
-                        data.setLastUpdateTime(currentTime);
-                        data.setCountry(country);
-                        data.setRegion(region);
-                        // Extract forecast.hour[].temp_c and time
-                        JsonArray forecastDays = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
-                        JsonArray hours = forecastDays.get(0).getAsJsonObject().getAsJsonArray("hour");
-
-                        for (JsonElement hourElement : hours) {
-                            JsonObject hour = hourElement.getAsJsonObject();
-                            double hourTemp = hour.get("temp_c").getAsDouble();
-                            String hourTime = hour.get("time").getAsString();
-                            System.out.println("Forecast hour temp_c: " + hourTemp + ", time: " + hourTime);
-                            data.setTemperatureData(hourTime, hourTemp);
-                        }
-                    }).join(); // Wait for completion
+                    }).join();
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
-        return data;
+        return data.get();
     }
 
 

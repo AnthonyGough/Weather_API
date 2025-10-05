@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.shape.Sphere;
@@ -43,9 +45,9 @@ public class WeatherController  {
     private Label country;
 
     @FXML
-    private Sphere tempSphere;
-    private static final String EMPTY_NARRATION_ERROR = "Search Box cannot be empty - select a city";
-    private static final String INVALID_RESULT = "Invalid Result - Check Search";
+
+    private static final String INVALID_NARRATION_ERROR = "Search must be letters only and cannot be empty";
+    private static final String INVALID_RESULT = "Location Unknown";
 
     @FXML
     public void initialize() {
@@ -54,12 +56,27 @@ public class WeatherController  {
         searchCityTextField.setFocusTraversable(false);
 
     }
-    public void searchCity() throws IOException {
+
+    @FXML
+    public void searchWeather(KeyEvent event) throws Exception {
+        if (event.getCode() == KeyCode.ENTER) {
+
+           processQuery();
+
+        }
+    }
+    public void searchCity()  {
         try {
             processQuery();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    private void displayWeather(WeatherData weatherData) {
+        country.setText(weatherData.getCountry());
+        region.setText(weatherData.getRegion());
     }
 
 
@@ -91,8 +108,8 @@ public class WeatherController  {
 
 
     private boolean validInput(String value) {
-        if (value.isEmpty() ) {
-            createDialog(EMPTY_NARRATION_ERROR);
+        if (value.isEmpty() || !isLettersOnly(value) ) {
+            createDialog(INVALID_NARRATION_ERROR);
             return false;
         }
         return true;
@@ -101,25 +118,25 @@ public class WeatherController  {
     private void invokeSearch(String search) throws IOException {
         client =  WeatherAPIClient.getInstance();
         WeatherData data =client.APIClient(search);
-        updateBasicInfo(data);
+
+        displayWeather(data);
     }
+
+    public static boolean isLettersOnly(String input) {
+        return input.matches("^[A-Za-z]+$");
+    }
+
 
 
     @FXML
     private void updateBasicInfo(WeatherData data) {
-
-        if (data.getCountry()!=null) {
+        System.out.println("Data is " + data.getValidData());
+        if (data.getValidData()) {
             country.setText(data.getCountry());
-        } else {
-            country.setText(INVALID_RESULT);
-        }
-        if (data.getRegion()!=null) {
             region.setText(data.getRegion());
         } else {
-            region.setText(INVALID_RESULT);
-        }
-        if (data.getCurrentTemp() !=0) {
-            int x = 0;
+            country.setText(INVALID_RESULT);
+            region.setText("");
         }
     }
 

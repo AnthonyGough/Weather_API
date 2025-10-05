@@ -4,7 +4,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="167.0" prefWidth="174.0" spacing="15.0" styleClass="root" stylesheets="@HourlyForecastCard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.softwaredev.weather_api.controller.ForecastController">
+<VBox alignment="CENTER" prefHeight="167.0" prefWidth="174.0" spacing="15.0" styleClass="root" stylesheets="@HourlyForecastCard.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.softwaredev.weather_api.controller.ForecastController">
    <Label fx:id="hourlyModalTime" alignment="CENTER" contentDisplay="BOTTOM" graphicTextGap="15.0" prefHeight="124.0" prefWidth="143.0" styleClass="hourlyModalTimeLabel" text="Label">
       <graphic>
          <ImageView fx:id="hourlyModalImage" fitHeight="83.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true" />
