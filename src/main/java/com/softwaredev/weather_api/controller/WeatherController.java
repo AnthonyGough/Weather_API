@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for displaying the weather data returned from API in the weather-view FXML
+ */
 
 public class WeatherController  {
 
@@ -48,6 +51,9 @@ public class WeatherController  {
     @FXML
     private Label todayForecastLabel;
 
+    /**
+     * Controllers for hourly temp display using HourlyForecastCard FXML
+     */
     @FXML private ForecastController hourlyCard1Controller;
     @FXML private ForecastController hourlyCard2Controller;
     @FXML private ForecastController hourlyCard3Controller;
@@ -61,22 +67,20 @@ public class WeatherController  {
     private static final String INVALID_NARRATION_ERROR = "Search must be letters only and cannot be empty";
     private static final String INVALID_RESULT = "Location Unknown";
 
+    // Singleton Instance API Client
+    private static WeatherAPIClient client;
     @FXML
     public void initialize() {
         country.setWrapText(true);
         region.setWrapText(true);
         searchCityTextField.setFocusTraversable(false);
-
     }
 
-    @FXML
-    public void searchWeather(KeyEvent event) throws Exception {
-        if (event.getCode() == KeyCode.ENTER) {
-
-           processQuery();
-
-        }
+    public void setState(Stage stage) {
+        this.stage = stage;
     }
+
+
     public void searchCity()  {
         try {
             processQuery();
@@ -85,6 +89,11 @@ public class WeatherController  {
         }
     }
 
+    /**
+     * Method to populate the controls in the Weather View - List of ForecastControllers used for the
+     * dynamic data displayed in GUI
+     * @param weatherData Data object returned from API
+     */
     @FXML
     private void displayWeather(WeatherData weatherData) {
         Map<String, Double> tempData = weatherData.getTemperatureData();
@@ -114,10 +123,8 @@ public class WeatherController  {
     }
 
 
-    public void setState(Stage stage) {
-        this.stage = stage;
-    }
-    private static WeatherAPIClient client;
+
+
     @FXML
     protected void onClearButtonClick() {
         searchCityTextField.clear();
@@ -140,9 +147,6 @@ public class WeatherController  {
     }
 
 
-
-
-
     private boolean validInput(String value) {
         if (value.isEmpty() || !isLettersOnly(value) ) {
             createDialog(INVALID_NARRATION_ERROR);
@@ -154,7 +158,6 @@ public class WeatherController  {
     private void invokeSearch(String search) throws IOException {
         client =  WeatherAPIClient.getInstance();
         WeatherData data =client.APIClient(search);
-
         displayWeather(data);
     }
 
@@ -163,18 +166,6 @@ public class WeatherController  {
     }
 
 
-
-    @FXML
-    private void updateBasicInfo(WeatherData data) {
-        System.out.println("Data is " + data.getValidData());
-        if (data.getValidData()) {
-            country.setText(data.getCountry());
-            region.setText(data.getRegion());
-        } else {
-            country.setText(INVALID_RESULT);
-            region.setText("");
-        }
-    }
 
     @FXML
     public void onExitButtonClick() {
@@ -197,8 +188,4 @@ public class WeatherController  {
         stage.setScene(scene);
         stage.show();
     }
-
-
-
-
 }

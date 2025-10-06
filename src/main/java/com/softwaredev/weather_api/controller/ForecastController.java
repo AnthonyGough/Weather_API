@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Controller for the individual hourly data display
+ */
 public class ForecastController {
     @FXML
     private Label hourlyModalTime;
