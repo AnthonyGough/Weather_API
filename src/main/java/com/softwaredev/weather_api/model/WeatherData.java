@@ -1,9 +1,19 @@
 package com.softwaredev.weather_api.model;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to represent weather information from API - Adjust the instance variables
+ * based on the information requirement
+ */
 public class WeatherData {
 
     private double currentTemp;
@@ -13,6 +23,8 @@ public class WeatherData {
     private Map<String, Double> temperatureData = new HashMap<>();
     private boolean validData;
     private String errorMessage;
+    private String dateOnlyPattern = "dd/MM/yyyy";
+    private String hourMinPattern="HH:mm";
 
     public WeatherData(){}
 
@@ -51,7 +63,9 @@ public class WeatherData {
     public void setLastUpdateTime(String value) {
         this.lastUpdateTime=value;
     }
-
+    public String getLastUpdateTime() {
+        return dateConvert();
+    }
     public String getCountry() {
         return this.country;
     }
@@ -61,5 +75,18 @@ public class WeatherData {
     public boolean getValidData() { return this.validData; }
     public void setValidData(boolean value) {
         this.validData = value;
+    }
+
+    /**
+     * Helper method to format data into format of choice for date/time
+     * @return
+     */
+    private String dateConvert() {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(this.lastUpdateTime, inputFormatter);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(dateOnlyPattern);
+       return dateTime.format(outputFormatter);
+
+
     }
 }

@@ -52,6 +52,6 @@
            }
 
            .todayForecastLabel{
-               -fx-font-size: 1.5em;
+               -fx-font-size: 18px;
                -fx-text-fill: #ffffff;
            }

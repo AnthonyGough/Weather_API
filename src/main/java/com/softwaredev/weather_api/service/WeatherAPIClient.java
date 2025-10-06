@@ -54,7 +54,12 @@ public class WeatherAPIClient {
     }
 
 
-
+    /**
+     * CompletableFuture<HttpResponse<String>> processed when returned to take Response Object
+     * and parse it to extract information required - information extracted stored as WeatherData object
+     * @param search Search String
+     * @return WeatherData object with weather data from API
+     */
     public WeatherData APIClient(String search)  {
         AtomicReference<WeatherData> data = new AtomicReference<>(new WeatherData());
         try {
@@ -66,7 +71,7 @@ public class WeatherAPIClient {
                             int errorCode = errorObj.get("code").getAsInt();
                             String errorMessage = "Error Code: " + errorObj.get("code").getAsInt() +"\nError Message: " + errorObj.get("message").getAsString();
                             data.set(new WeatherData(false, errorMessage));
-
+                            System.out.println(errorMessage);
                         } else {
 
                             JsonObject current = root.getAsJsonObject("current");
@@ -79,9 +84,6 @@ public class WeatherAPIClient {
 
                             data.set(new WeatherData(currentTemp, currentTime, region, country,true));
 
-
-                            System.out.println("Country = " + country + "\nRegion: " + region + "\nValid: " + data.get().getValidData());
-                            // Extract forecast.hour[].temp_c and time
                             JsonArray forecastDays = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
                             JsonArray hours = forecastDays.get(0).getAsJsonObject().getAsJsonArray("hour");
 
@@ -89,8 +91,7 @@ public class WeatherAPIClient {
                                 JsonObject hour = hourElement.getAsJsonObject();
                                 double hourTemp = hour.get("temp_c").getAsDouble();
                                 String hourTime = hour.get("time").getAsString();
-                                System.out.println("Forecast hour temp_c: " + hourTemp + ", time: " + hourTime);
-                                data.get().setTemperatureData(hourTime, hourTemp);
+                                data.get().setTemperatureData(hourTime.split(" ")[1] , hourTemp);
                             }
 
                         }
@@ -102,8 +103,14 @@ public class WeatherAPIClient {
     }
 
 
-
-
+    /**
+     *  Sends the request and receives the response asynchronously.
+     *  It will return the CompletableFuture immediately .
+     *  The CompletableFuture completes when the response becomes available.
+     * @param search Search Parameter for API
+     * @return CompleteableFuture - CompletableFuture enables asynchronous programming,
+     *         facilitating the execution of tasks concurrently without blocking the main thread.
+     */
 
     public static CompletableFuture<String> MakeAsyncHttpRequest(String search) {
         HttpClient client = HttpClient.newHttpClient();
@@ -111,11 +118,17 @@ public class WeatherAPIClient {
                 .uri(URI.create(APIUrlForm(search)))
                 .timeout(Duration.ofSeconds(20))
                 .build();
+
             return client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body);
 
     }
 
 
+    /**
+     *  Helper method to load API key and construct API Query
+     * @param search
+     * @return API Query String
+     */
     private  static String APIUrlForm(String search) {
         Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
         return generateQuery(dotenv, search).toString();

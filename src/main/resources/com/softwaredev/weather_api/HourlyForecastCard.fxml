@@ -5,10 +5,11 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" prefHeight="167.0" prefWidth="174.0" spacing="15.0" styleClass="root" stylesheets="@HourlyForecastCard.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.softwaredev.weather_api.controller.ForecastController">
-   <Label fx:id="hourlyModalTime" alignment="CENTER" contentDisplay="BOTTOM" graphicTextGap="15.0" prefHeight="124.0" prefWidth="143.0" styleClass="hourlyModalTimeLabel" text="Label">
+   <Label fx:id="hourlyModalTime" alignment="CENTER" contentDisplay="BOTTOM" graphicTextGap="15.0" prefHeight="124.0" prefWidth="143.0" styleClass="hourlyModalTimeLabel" text="">
       <graphic>
-         <ImageView fx:id="hourlyModalImage" fitHeight="83.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="hourlyModalImage" fitHeight="83.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true"  />
+
       </graphic>
    </Label>
-   <Label fx:id="hourlyModalTemperature" alignment="CENTER" styleClass="hourlyModalTemperature" text="Label" />
+   <Label fx:id="hourlyModalTemperature" alignment="CENTER" styleClass="hourlyModalTemperature" text="" />
 </VBox>
