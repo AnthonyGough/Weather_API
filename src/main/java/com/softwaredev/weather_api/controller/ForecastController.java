@@ -15,9 +15,9 @@ public class ForecastController {
     @FXML
     private Label hourlyModalTemperature;
 
-    public void setInfo(String time, String imageName, String temperature) {
+    public void setInfo(String time,  Image image, String temperature) {
         hourlyModalTime.setText(time);
-        hourlyModalImage.setImage(new Image(getClass().getResource("./com/softwaredev/weather_api/medium" + imageName).toExternalForm()));
+        hourlyModalImage.setImage(image);
         hourlyModalTemperature.setText(temperature + "°");
     }
 }

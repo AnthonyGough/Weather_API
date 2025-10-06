@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -18,11 +19,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-
-
-
+import java.util.Map;
 
 
 public class WeatherController  {
@@ -43,6 +44,17 @@ public class WeatherController  {
     private Label region;
     @FXML
     private Label country;
+
+    @FXML
+    private Label todayForecastLabel;
+
+    @FXML private ForecastController hourlyCard1Controller;
+    @FXML private ForecastController hourlyCard2Controller;
+    @FXML private ForecastController hourlyCard3Controller;
+    @FXML private ForecastController hourlyCard4Controller;
+    @FXML private ForecastController hourlyCard5Controller;
+    @FXML private ForecastController hourlyCard6Controller;
+
 
     @FXML
 
@@ -75,8 +87,30 @@ public class WeatherController  {
 
     @FXML
     private void displayWeather(WeatherData weatherData) {
-        country.setText(weatherData.getCountry());
-        region.setText(weatherData.getRegion());
+        Map<String, Double> tempData = weatherData.getTemperatureData();
+        if (weatherData.getValidData()) {
+            country.setText(weatherData.getCountry());
+            region.setText(weatherData.getRegion());
+            List<ForecastController> hourlyControllers = List.of(
+                    hourlyCard1Controller, hourlyCard2Controller, hourlyCard3Controller,
+                    hourlyCard4Controller, hourlyCard5Controller, hourlyCard6Controller
+            );
+            todayForecastLabel.setText("Forecast Date: " + weatherData.getLastUpdateTime()) ;
+            int i=0;
+            URL imageUrl = getClass().getResource("/images/sunny.png");
+            Image image = new Image(imageUrl.toExternalForm());
+            for (Map.Entry<String, Double> entry : tempData.entrySet()) {
+                String key = entry.getKey();
+                Double value = entry.getValue();
+                hourlyControllers.get(i).setInfo(key, image, value.toString());
+                i++;
+                if (i>=5) break;
+            }
+
+        } else {
+            country.setText(INVALID_RESULT);
+        }
+
     }
 
 
@@ -99,6 +133,8 @@ public class WeatherController  {
     private void processQuery() throws IOException {
         String input = searchCityTextField.getText();
         if (validInput(input)) {
+            System.out.println("\nSearch is " + input);
+
             invokeSearch(input);
         }
     }
