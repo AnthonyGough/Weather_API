@@ -140,8 +140,6 @@ public class WeatherController  {
     private void processQuery() throws IOException {
         String input = searchCityTextField.getText();
         if (validInput(input)) {
-            System.out.println("\nSearch is " + input);
-
             invokeSearch(input);
         }
     }
@@ -157,6 +155,7 @@ public class WeatherController  {
 
     private void invokeSearch(String search) throws IOException {
         client =  WeatherAPIClient.getInstance();
+
         WeatherData data =client.APIClient(search);
         displayWeather(data);
     }
