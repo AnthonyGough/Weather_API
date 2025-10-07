@@ -1,0 +1,23 @@
+.root *{
+    -fx-background-color: transparent;
+    -fx-font-family: "Inter SemiBold";
+    -fx-text-fill: #c9c9c9;
+    -fx-font-size: 1.6em;
+}
+
+.root{
+    transition: all 0.3s ease-in-out;
+}
+
+.root:hover {
+    -fx-effect: dropshadow(gaussian, #0E151E, 10, 0.5, 4, 4);
+    -fx-translate-x: 1;
+    -fx-translate-y: -4;
+}
+
+.hourlyModalTemperature {
+    -fx-text-fill: white;
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-font-family: "HelveticaNeueLT Std Med";
+}
