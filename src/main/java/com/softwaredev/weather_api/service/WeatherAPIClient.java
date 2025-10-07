@@ -138,7 +138,8 @@ public class WeatherAPIClient {
     private static StringBuilder generateQuery(Dotenv dotenv, String searchValue) {
         StringBuilder sb = new StringBuilder();
         sb.append(dotenv.get("WEATHER_URI"));
-        sb.append(dotenv.get("WEATHER_API_KEY"));
+        sb.append(dotenv.get("WEATHER_API_KEY").trim());
+        System.out.println(dotenv.get("WEATHER_API_KEY"));
         sb.append("&q=");
         sb.append(searchValue);
         return sb.append(dotenv.get("WEATHER_API_PARAMS"));

@@ -2,10 +2,10 @@ package com.softwaredev.weather_api;
 
 import javafx.application.Application;
 
-import java.io.IOException;
+
 
 public class Launcher {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)  {
         Application.launch(WeatherApplication.class, args);
     }
 }
